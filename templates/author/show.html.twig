@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Автор{% endblock %}
+
+{% block body %}
+    <h1>Автор</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ author.id }}</td>
+            </tr>
+            <tr>
+                <th>Имя</th>
+                <td>{{ author.name }}</td>
+            </tr>
+            <tr>
+                <th>Фамилия</th>
+                <td>{{ author.surname }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('author_index') }}">Вернуться к списку авторов</a>
+
+    <a href="{{ path('author_edit', {'id': author.id}) }}">Редактировать</a>
+
+    {{ include('author/_delete_form.html.twig') }}
+{% endblock %}

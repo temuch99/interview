@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Новый Автор{% endblock %}
+
+{% block body %}
+    <h1>Создать нового автора</h1>
+
+    {{ include('author/_form.html.twig') }}
+
+    <a href="{{ path('author_index') }}">Вернуться к списку авторов</a>
+{% endblock %}
