@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -110,11 +111,11 @@ class Book
         return $this->authors;
     }
 
-    public function addAuthors(Author $author): self
+    public function addAuthor(Author $author): self
     {
         if (!$this->authors->contains($author)) {
             $this->authors[] = $author;
-            $author->addBooks($this);
+            // $author->addBooks($this);
         }
 
         return $this;
@@ -122,10 +123,65 @@ class Book
 
     public function removeAuthor(Author $author): self
     {
-        if ($this->authors->removeElement($book)) {
-            $this->authors->removeElement($author);
-        }
+        // if ($this->authors->removeElement($book)) {
+        $this->authors->removeElement($author);
+        // }
 
         return $this;
+    }
+
+    public function removeAuthors(): self
+    {
+        foreach ($this->authors as $author) {
+            $this->authors->removeElement($author);
+        }
+        return $this;
+    }
+
+    /**
+     * Unmapped property for fileuploads
+     */
+    private $pictureFile;
+
+    /**
+     * @param UploadedFile $pictureFile
+     */
+    public function setPictureFile(UploadedFile $pictureFile = null): self
+    {
+        $this->pictureFile = $pictureFile;
+        $this->upload();
+
+        return $this;
+    }
+
+    /**
+     * @return UploadedFile
+     */
+    public function getPictureFile()
+    {
+        return $this->pictureFile;
+    }
+
+    /**
+     * Copy from tmp and save pictureFile
+     */
+    public function upload()
+    {
+        if (null === $this->getPictureFile()) {
+            return;
+        }
+
+        $originalFilename = pathinfo($this->getPictureFile()->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+        $newFilename = $safeFilename.'-'.uniqid().'.'.$this->getPictureFile()->guessExtension();
+
+        $this->getPictureFile()->move(
+            'uploads/pictures',
+            $newFilename
+        );
+
+        $this->setPicture($newFilename);
+
+        $this->setPictureFile(null);
     }
 }

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Добавление новой книги{% endblock %}
+
+{% block body %}
+    <h1>Добавление новой книги</h1>
+
+    {{ include('book/_form.html.twig') }}
+
+    <a href="{{ path('book_index') }}">Вернуться к списку книг</a>
+{% endblock %}

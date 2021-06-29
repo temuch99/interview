@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Книга{% endblock %}
+
+{% block body %}
+    <h1>Книга</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ book.id }}</td>
+            </tr>
+            <tr>
+                <th>Название</th>
+                <td>{{ book.title }}</td>
+            </tr>
+            <tr>
+                <th>Описание</th>
+                <td>{{ book.description }}</td>
+            </tr>
+            <tr>
+                <th>Дата публикации</th>
+                <td>{{ book.publicAt ? book.publicAt|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Обложка</th>
+                <td>{{ book.picture }}</td>
+            </tr>
+            <tr>
+                <th>Авторы</th>
+                <td>
+                    {% for author in book.authors %}
+                        <span>{{ author }}</span><br/>
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('book_index') }}">Вернуться к списку книг</a>
+
+    <a href="{{ path('book_edit', {'id': book.id}) }}">Редактировать</a>
+
+    {{ include('book/_delete_form.html.twig') }}
+{% endblock %}

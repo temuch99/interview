@@ -39,6 +39,11 @@ class Author
         $this->books = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->name." ".$this->surname;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -80,7 +85,7 @@ class Author
     {
         if (!$this->books->contains($book)) {
             $this->books[] = $book;
-            // $book->addAuthors($this);
+            $book->addAuthor($this);
         }
 
         return $this;
@@ -88,9 +93,9 @@ class Author
 
     public function removeBook(Book $book): self
     {
-        // if ($this->books->removeElement($book)) {
-        $book->removeAuthors($this);
-        // }
+        if ($this->books->removeElement($book)) {
+            $book->removeAuthor($this);
+        }
 
         return $this;
     }

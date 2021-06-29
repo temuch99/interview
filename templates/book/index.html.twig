@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Список книг{% endblock %}
+
+{% block body %}
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                closeOnSelect: false
+            });
+        });
+    </script>
+    <h1>Список книг</h1>
+
+    <div class="row">
+        <form action="/book" method="GET" class="row">
+            <div class="col-3">
+                <label for="title_filter">Заголовок</label>
+                <input type="text" id="title_filter" class="form-control" name="title" value="{{ criterias.title|default('') }}" />
+            </div>
+            <div class="col-3">
+                <label for="description_filter">Описание</label>
+                <input type="text" id="title_filter" class="form-control" name="description" value="{{ criterias.description|default('') }}" />
+            </div>
+            <div class="col-3">
+                <label for="date_filter">Дата</label>
+                <input type="date" id="title_filter" class="form-control" name="public_at" value="{{ criterias.public_at|default('') }}" />
+            </div>
+            <div class="col-3 mt-auto">
+                <input type="submit" class="form-control btn btn-success" value="Отфильтровать" />
+            </div>
+        </form>
+    </div>
+    <hr/>
+    <div>
+        <div class="row">
+            <div class="col-1">Название</div>
+            <div class="col-2">Описание</div>
+            <div class="col-2">Дата</div>
+            <div class="col-3">Авторы</div>
+            <div class="col-2">Картинка</div>
+            <div class="col-1">Действия</div>
+        </div>
+        <hr/>
+        {% for book in books %}
+            <div>
+                <form action="/book/{{ book.id }}/edit" method="post" enctype="multipart/form-data" class="row">
+                    <input type="hidden" name="book[_token]" value="{{ csrf_token('book') }}">
+                    <div class="col-1">
+                        <input type="text" value="{{ book.title }}" name="book[title]" class="form-control" required />
+                    </div>
+                    <div class="col-2">
+                        <input type="text" value="{{ book.description }}" name="book[description]" class="form-control" />
+                    </div>
+                    <div class="col-2">
+                        <input type="date" value="{{ book.publicAt ? book.publicAt|date('Y-m-d') : '' }}"  name="book[public_at]" class="form-control" />
+                    </div>
+                    <div class="col-3">
+                        <select name="book[authors][]" class="form-control select2" multiple width="100%" tabindex="-1">
+                            {% for author in authors %}
+                                <option value="{{ author.id }}" 
+                                    {% if author in book.authors %}
+                                        selected='selected'
+                                    {% endif %}
+                                >
+                                    {{ author }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <img src="/uploads/pictures/{{ book.picture }}" width="100%" />
+                        <input type="file" name="book[picture]" class="form-control" />
+                    </div>
+                    <div class="col-1">
+                        <input type="submit" class="btn btn-success" value="Сохранить">
+                        <a href="{{ path('book_show', {'id': book.id}) }}">Перейти</a>
+                        <a href="{{ path('book_edit', {'id': book.id}) }}">Редактировать</a>
+                    </div>
+                </form>
+            </div>
+            <hr/>
+        {% else %}
+            <div class="col-12">Записи не найдены</div>
+        {% endfor %}
+    </div>
+
+    <a href="{{ path('book_new') }}">Добавить новую книгу</a>
+{% endblock %}
