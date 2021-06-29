@@ -25,7 +25,6 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
-        "fzaninotto/faker": "^1.9",
         "symfony/maker-bundle": "^1.32",
         "symfony/stopwatch": "^4.4",
         "symfony/web-profiler-bundle": "^4.4",
