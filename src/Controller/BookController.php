@@ -67,13 +67,7 @@ class BookController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($book);
 
-            foreach($book->getAuthors() as $author) {
-                $author->addBook($book);
-                $entityManager->persist($author);
-                $entityManager->flush();
-            }
-
-            // foreach ($originAuthors as $author) {
+            // foreach($book->getAuthors() as $author) {
             //     $author->addBook($book);
             //     $entityManager->persist($author);
             //     $entityManager->flush();
@@ -105,11 +99,6 @@ class BookController extends AbstractController
      */
     public function edit(Request $request, Book $book, AuthorRepository $authorRepository): Response
     {
-        // $authors = new ArrayCollection();
-        // foreach ($book->getAuthors() as $author) {
-        //     $authors->add($author);
-        // }
-
         $form = $this->createForm(BookType::class, $book, [
             'require_picture' => false
         ]);
@@ -145,8 +134,8 @@ class BookController extends AbstractController
             $allauthors = $authorRepository->findAll();
             foreach ($allauthors as $author) {
                 $author->removeBook($book);
-                // $entityManager->persist($book);
-                // $entityManager->flush();
+                $entityManager->persist($author);
+                $entityManager->flush();
             }
 
             foreach ($originAuthors as $author) {

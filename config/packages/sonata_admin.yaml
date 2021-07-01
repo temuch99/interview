@@ -1,0 +1,36 @@
+sonata_admin:
+    title: 'Sonata Admin'
+    dashboard:
+        blocks:
+            - { type: sonata.admin.block.admin_list, position: left }
+    options:
+        legacy_twig_text_extension: false
+
+sonata_block:
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]
+
+services:
+    admin.author:
+        class: App\Admin\AuthorAdmin
+        arguments: [~, App\Entity\Author, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Author }
+    admin.book:
+        class: App\Admin\BookAdmin
+        arguments: 
+            - ~
+            - App\Entity\Book
+            - App\Controller\BookAdminController
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Book }
+
+# admin_area:
+#     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+#     prefix: /admin
+
+# _sonata_admin:
+#     resource: .
+#     type: sonata_admin
+#     prefix: /admin

@@ -34,7 +34,10 @@ class BookType extends AbstractType
                     'year' => 'Год', 'month' => 'Месяц', 'day' => 'День',
                 ]
             ])
-            ->add('authors')
+            ->add('authors', EntityType::class, [
+                'class' => Author::class,
+                'multiple' => true
+            ])
             ->add('picture', FileType::class, [
                 'label' => 'Обложка',
 

@@ -62,6 +62,7 @@ class Book
 
     public function setTitle(string $title): self
     {
+        dump("setTitle");
         $this->title = $title;
 
         return $this;
@@ -86,6 +87,7 @@ class Book
 
     public function setPublicAt(\DateTimeInterface $public_at): self
     {
+        dump("SetPublicAt");
         $this->public_at = $public_at;
 
         return $this;
@@ -115,7 +117,7 @@ class Book
     {
         if (!$this->authors->contains($author)) {
             $this->authors[] = $author;
-            // $author->addBooks($this);
+            $author->addBook($this);            
         }
 
         return $this;
