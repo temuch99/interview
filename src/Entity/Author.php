@@ -83,7 +83,6 @@ class Author
 
     public function addBook(Book $book): self
     {
-        dump("addBook");
         if (!$this->books->contains($book)) {
             $this->books[] = $book;
             $book->addAuthor($this);

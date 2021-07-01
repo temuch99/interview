@@ -5,11 +5,13 @@ sonata_admin:
             - { type: sonata.admin.block.admin_list, position: left }
     options:
         legacy_twig_text_extension: false
+    security:
+         handler: sonata.admin.security.handler.acl
 
-sonata_block:
-    blocks:
-        sonata.admin.block.admin_list:
-            contexts: [admin]
+# sonata_block:
+#     blocks:
+#         sonata.admin.block.admin_list:
+#             contexts: [admin]
 
 services:
     admin.author:
@@ -34,3 +36,16 @@ services:
 #     resource: .
 #     type: sonata_admin
 #     prefix: /admin
+
+# sonata_admin:
+#     title: 'Sonata Admin'
+#     dashboard:
+#         blocks:
+#             - { type: sonata.admin.block.admin_list, position: left }
+#     options:
+#         legacy_twig_text_extension: false
+
+# sonata_block:
+#     blocks:
+#         sonata.admin.block.admin_list:
+#             contexts: [admin]

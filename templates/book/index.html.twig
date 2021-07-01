@@ -13,6 +13,14 @@
     <h1>Список книг</h1>
 
     <div class="row">
+        <div class="col-6">
+            <a href="{{ path('book_index_doctrine') }}">Показать книги, у которых не менее двух авторов (doctrine)</a>
+        </div>
+        <div class="col-6">
+            <a href="{{ path('book_index_sql') }}">Показать книги, у которых не менее двух авторов (sql)</a>
+        </div>
+    </div>
+    <div class="row">
         <form action="/book" method="GET" class="row">
             <div class="col-3">
                 <label for="title_filter">Заголовок</label>

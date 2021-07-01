@@ -88,6 +88,35 @@ class BookRepository extends ServiceEntityRepository
     }
     
 
+    public function findWhereMoreThanTwoAuthors()
+    {
+        return $this->createQueryBuilder('t1')
+            ->leftJoin('t1.authors', 'a')
+            ->groupBy('t1.id')
+            ->having('COUNT(t1.id) > 2')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWhereMoreThanTwoAuthorsSQL()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $query = 'SELECT book.* 
+            FROM book 
+            RIGHT JOIN (SELECT book_id 
+                        FROM author_book 
+                        GROUP BY book_id 
+                        HAVING count(author_id) >= 2) t 
+            ON book.id=t.book_id';
+
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $stmt->fetchAllAssociative();
+    }
+
     /*
     public function findOneBySomeField($value): ?Book
     {

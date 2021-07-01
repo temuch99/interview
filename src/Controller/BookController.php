@@ -36,6 +36,35 @@ class BookController extends AbstractController
     }
 
     /**
+     * @Route("/doctrine", name="book_index_doctrine", methods={"GET"})
+     */
+    public function indexDoctrine(Request $request, BookRepository $bookRepository, AuthorRepository $authorRepository): Response
+    {
+        $books = $bookRepository->findWhereMoreThanTwoAuthors();
+        return $this->render('book/index.html.twig', [
+            'books' => $books,
+            'authors' => $authorRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/sql", name="book_index_sql", methods={"GET"})
+     */
+    public function indexSQL(Request $request, BookRepository $bookRepository, AuthorRepository $authorRepository): Response
+    {
+        $booksArray = $bookRepository->findWhereMoreThanTwoAuthorsSQL();
+        $books = [];
+        foreach ($booksArray as $book) {
+            $books[] = $bookRepository->find($book['id']);
+        }
+
+        return $this->render('book/index.html.twig', [
+            'books' => $books,
+            'authors' => $authorRepository->findAll(),
+        ]);
+    }
+
+    /**
      * @Route("/new", name="book_new", methods={"GET","POST"})
      */
     public function new(Request $request, AuthorRepository $authorRepository): Response
@@ -67,11 +96,11 @@ class BookController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($book);
 
-            // foreach($book->getAuthors() as $author) {
-            //     $author->addBook($book);
-            //     $entityManager->persist($author);
-            //     $entityManager->flush();
-            // }
+            foreach($book->getAuthors() as $author) {
+                $author->addBook($book);
+                $entityManager->persist($author);
+                $entityManager->flush();
+            }
 
             $entityManager->flush();
 

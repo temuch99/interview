@@ -62,7 +62,6 @@ class Book
 
     public function setTitle(string $title): self
     {
-        dump("setTitle");
         $this->title = $title;
 
         return $this;
@@ -87,7 +86,6 @@ class Book
 
     public function setPublicAt(\DateTimeInterface $public_at): self
     {
-        dump("SetPublicAt");
         $this->public_at = $public_at;
 
         return $this;
