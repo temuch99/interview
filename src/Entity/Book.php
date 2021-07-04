@@ -172,8 +172,7 @@ class Book
         }
 
         $originalFilename = pathinfo($this->getPictureFile()->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
-        $newFilename = $safeFilename.'-'.uniqid().'.'.$this->getPictureFile()->guessExtension();
+        $newFilename = $originalFilename.'-'.uniqid().'.'.$this->getPictureFile()->guessExtension();
 
         $this->getPictureFile()->move(
             'uploads/pictures',
