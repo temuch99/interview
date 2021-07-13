@@ -139,8 +139,7 @@ class BookController extends AbstractController
                 $pictureFile = $form->get('picture')->getData();
 
                 $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
 
                 try {
                     $pictureFile->move(

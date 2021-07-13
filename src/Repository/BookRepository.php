@@ -93,7 +93,7 @@ class BookRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t1')
             ->leftJoin('t1.authors', 'a')
             ->groupBy('t1.id')
-            ->having('COUNT(t1.id) > 2')
+            ->having('COUNT(t1.id) >= 2')
             ->getQuery()
             ->getResult();
     }
