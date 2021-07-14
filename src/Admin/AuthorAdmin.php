@@ -30,4 +30,12 @@ final class AuthorAdmin extends AbstractAdmin
         	->addIdentifier('surname')
         ;
     }
+
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
 }

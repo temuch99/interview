@@ -29,7 +29,7 @@ class BookController extends AbstractController
         });
 
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findBy($criterias),
+            'books' => $bookRepository->findByParams($criterias),
             'authors' => $authorRepository->findAll(),
             'criterias' => $criterias
         ]);

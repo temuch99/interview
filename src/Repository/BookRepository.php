@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @method Book|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,18 +26,42 @@ class BookRepository extends ServiceEntityRepository
     
     public function findByParams($array)
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.title LIKE :title')
-            ->setParameter('title', $array['title'])
-            ->andWhere('b.description LIKE :descrition')
-            ->setParameter('description', $array['description'])
-            ->andWhere('b.public_at LIKE :date')
-            ->setParameter('date', $array['date'])
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $trash = "+!@#$%/\\*\"'";
+        $columns = array('title', 'description', 'public_at', 'authors');
+        $result = [];
+        foreach ($columns as $col) {
+            $result[$col] = isset($array[$col]) ? str_replace(str_split($trash), "", $array[$col]) : "";
+        }
+        $query = $this->createQueryBuilder('b')
+                      ->andWhere('b.title LIKE :title')
+                      ->setParameter('title', '%'.$result['title'].'%')
+                      ->andWhere('b.description LIKE :description')
+                      ->setParameter('description', '%'.$result['description'].'%');
+
+        if ($result["public_at"] != "") {
+            $query->andWhere('b.public_at LIKE :date')
+                  ->setParameter('date', $result['public_at']);
+        }
+
+        $books = $query->getQuery()->getResult();
+
+        // TODO: некрасиво сделал, но как через запрос Doctrine это сделать пока нет понимания
+        $result_books = array();
+        if ($result["authors"] != "") {
+            foreach ($books as $book) {
+                foreach ($book->getAuthors() as $author) {
+                    if (in_array($author->getId(), $result["authors"]) && !in_array($book, $result_books)) {
+                        array_push($result_books, $book);
+                    }
+                }
+            }
+        } else 
+        {
+            $result_books = $books;
+        }
+
+        return $result_books;
+
     }
 
     /**

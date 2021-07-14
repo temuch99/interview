@@ -22,11 +22,11 @@
     </div>
     <div class="row">
         <form action="/book" method="GET" class="row">
-            <div class="col-3">
+            <div class="col-2">
                 <label for="title_filter">Заголовок</label>
                 <input type="text" id="title_filter" class="form-control" name="title" value="{{ criterias.title|default('') }}" />
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <label for="description_filter">Описание</label>
                 <input type="text" id="title_filter" class="form-control" name="description" value="{{ criterias.description|default('') }}" />
             </div>
@@ -34,7 +34,17 @@
                 <label for="date_filter">Дата</label>
                 <input type="date" id="title_filter" class="form-control" name="public_at" value="{{ criterias.public_at|default('') }}" />
             </div>
-            <div class="col-3 mt-auto">
+            <div class="col-3">
+                <label for="authors_filter">Авторы</label>
+                <select name="authors[]" class="form-control select2" multiple width="100%" tabindex="-1" id="authors_filter">
+                    {% for author in authors %}
+                        <option value="{{ author.id }}"> 
+                            {{ author }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-2 mt-auto">
                 <input type="submit" class="form-control btn btn-success" value="Отфильтровать" />
             </div>
         </form>

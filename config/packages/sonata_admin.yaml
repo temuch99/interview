@@ -16,7 +16,10 @@ sonata_admin:
 services:
     admin.author:
         class: App\Admin\AuthorAdmin
-        arguments: [~, App\Entity\Author, ~]
+        arguments: 
+            - ~
+            - App\Entity\Author
+            - App\Controller\AuthorAdminController
         tags:
             - { name: sonata.admin, manager_type: orm, label: Author }
     admin.book:
